@@ -2,15 +2,28 @@
 """Defines the function filter_datum."""
 import re
 import logging
+from os import getenv
+import mysql.connector
 from typing import List
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
+def get_db():
+    """Returns a connector to MySQL database."""
+    my_db = mysql.connector.connect(
+        host=getenv("PERSONAL_DATA_DB_HOST"),
+        user=getenv("PERSONAL_DATA_DB_USERNAME"),
+        password=getenv("PERSONAL_DATA_DB_PASSWORD"),
+        database=getenv("PERSONAL_DATA_DB_NAME"),
+    )
+    return my_db
+
+
 def filter_datum(
-        fields: List[str], redaction: str,
-        message: str, separator: str) -> str:
+    fields: List[str], redaction: str, message: str, separator: str
+) -> str:
     """Returns an obfuscated log message.
 
     Parameters:
@@ -22,16 +35,16 @@ def filter_datum(
     """
     for f in fields:
         message = re.sub(
-                '{}=.*?{}'.format(f, separator),
-                '{}={}{}'.format(f, redaction, separator),
-                message
-                )
+            "{}=.*?{}".format(f, separator),
+            "{}={}{}".format(f, redaction, separator),
+            message,
+        )
     return message
 
 
 def get_logger() -> logging.Logger:
     """Creates and returns a logger."""
-    logger = logging.getLogger('user_data')
+    logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
@@ -43,8 +56,7 @@ def get_logger() -> logging.Logger:
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """Redacting Formatter class"""
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -59,7 +71,8 @@ class RedactingFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """Filters values in incoming log records."""
         record.msg = filter_datum(
-                list(self.fields), self.REDACTION,
-                record.getMessage(), self.SEPARATOR
-                )
+            list(
+                self.fields), self.REDACTION,
+            record.getMessage(), self.SEPARATOR
+        )
         return super(RedactingFormatter, self).format(record)
