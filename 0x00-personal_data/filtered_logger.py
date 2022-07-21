@@ -10,7 +10,7 @@ from typing import List
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Returns a connector to MySQL database."""
     my_db = mysql.connector.connect(
         host=getenv("PERSONAL_DATA_DB_HOST"),
