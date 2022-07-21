@@ -17,8 +17,22 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         user=getenv("PERSONAL_DATA_DB_USERNAME"),
         password=getenv("PERSONAL_DATA_DB_PASSWORD"),
         database=getenv("PERSONAL_DATA_DB_NAME"),
+        auth_plugin='mysql_native_password'
     )
     return my_db
+
+
+def main() -> None:
+    """Display all rows in the user table of a database."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    message = cursor
+    logger = get_logger()
+    logger.info(message)
+
+    cursor.close()
+    db.close()
 
 
 def filter_datum(
@@ -76,3 +90,7 @@ class RedactingFormatter(logging.Formatter):
             record.getMessage(), self.SEPARATOR
         )
         return super(RedactingFormatter, self).format(record)
+
+
+if __name__ == "__main__":
+    main()
