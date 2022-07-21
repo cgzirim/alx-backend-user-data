@@ -29,7 +29,7 @@ def filter_datum(
     return message
 
 
-def get_logger() -> logging.logger:
+def get_logger() -> logging.Logger:
     """Creates and returns a logger."""
     logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
