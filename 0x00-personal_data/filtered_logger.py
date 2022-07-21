@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Defines the function filter_datum."""
 import re
+import logging
 from typing import List
 
 
@@ -23,3 +24,26 @@ def filter_datum(
                 message
                 )
     return message
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    logging.basicConfig(level=logging.INFO, format=FORMAT)
+
+    def __init__(self, fields: List[str]):
+        self.fields = fields
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Filters values in incoming log records."""
+        record.msg = filter_datum(
+                list(self.fields), self.REDACTION,
+                record.getMessage(), self.SEPARATOR
+                )
+        return super(RedactingFormatter, self).format(record)
