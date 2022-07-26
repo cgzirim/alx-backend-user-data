@@ -2,10 +2,9 @@
 """Defines BasicAuth class."""
 import base64
 import hashlib
-from genericpath import isfile
 from os import path
-from models.user import User
 from typing import Tuple, TypeVar
+from models.user import User
 from api.v1.auth.auth import Auth
 
 
