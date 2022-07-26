@@ -12,9 +12,9 @@ class Auth:
         """Defines which routes don't need authentication."""
         if path is None:
             return True
-            
-        if path[-1] != '/':
-            path += '/'
+
+        if path[-1] != "/":
+            path += "/"
 
         if excluded_paths is False or path not in excluded_paths:
             return True
@@ -25,10 +25,10 @@ class Auth:
         """Returns Authorization data if Authorization exists in requests."""
         if request is None:
             return None
-        if request.headers.get('Authorization') is None:
+        if request.headers.get("Authorization") is None:
             return None
 
-        return request.headers.get('Authorization')
+        return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar("User"):
         """stuff"""
