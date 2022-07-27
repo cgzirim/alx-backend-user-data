@@ -10,7 +10,7 @@ class Auth:
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Defines which routes don't need authentication."""
-        if path is None:
+        if path is None or excluded_paths is None:
             return True
 
         if path[-1] != "/":
@@ -21,7 +21,7 @@ class Auth:
                 if path[8:12] == p[8:12]:
                     return False
 
-        if excluded_paths is None or path not in excluded_paths:
+        if path not in excluded_paths:
             return True
 
         return False
