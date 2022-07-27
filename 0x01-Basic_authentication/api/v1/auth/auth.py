@@ -17,8 +17,9 @@ class Auth:
             path += "/"
 
         for p in excluded_paths:
-            if p[-2] == "*":
-                if path[8:12] == p[8:12]:
+            if p[-1] == "*":
+                idx = p.index("*")
+                if path[8:idx] == p[8:idx]:
                     return False
 
         if path not in excluded_paths:
