@@ -7,6 +7,8 @@ from api.v1.views import app_views
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
 from api.v1.auth.session_auth import SessionAuth
+from api.v1.auth.session_db_auth import SessionDBAuth
+from api.v1.auth.session_exp_auth import SessionExpAuth
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS, cross_origin
 
@@ -24,6 +26,12 @@ if os.getenv("AUTH_TYPE") == "basic_auth":
 
 if os.getenv("AUTH_TYPE") == "session_auth":
     auth = SessionAuth()
+
+if os.getenv("AUTH_TYPE") == "session_exp_auth":
+    auth = SessionExpAuth()
+
+if os.getenv("AUTH_TYPE") == "session_db_auth":
+    auth = SessionDBAuth()
 
 
 @app.before_request
@@ -73,4 +81,4 @@ def forbidden(error) -> str:
 if __name__ == "__main__":
     host = os.getenv("API_HOST", "0.0.0.0")
     port = os.getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
