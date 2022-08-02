@@ -69,7 +69,6 @@ class Auth:
         setattr(user, "session_id", self._generate_uuid())
         return self.session_id
 
-    @staticmethod
     def _generate_uuid():
         """Returns a string representation of a new UUID."""
         return str(uuid.uuid4())
