@@ -17,6 +17,10 @@ def _hash_password(password: str) -> bytes:
 
     return hashed_pwd
 
+def _generate_uuid():
+        """Returns a string representation of a new UUID."""
+        return str(uuid.uuid4())
+
 
 class Auth:
     """Auth class to interact with the authentication database."""
@@ -66,9 +70,5 @@ class Auth:
         except NoResultFound:
             return None
 
-        setattr(user, "session_id", self._generate_uuid())
+        setattr(user, "session_id", _generate_uuid())
         return self.session_id
-
-    def _generate_uuid():
-        """Returns a string representation of a new UUID."""
-        return str(uuid.uuid4())
