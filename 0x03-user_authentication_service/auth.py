@@ -22,8 +22,11 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email, password):
+    def register_user(self, email: str, password: str) -> bytes:
         """Registers a user"""
+        if not isinstance(email, str) or not isinstance(password, str):
+            return None
+
         try:
             self._db.find_user_by(email=email)
             raise ValueError("User {} already".format(email))
