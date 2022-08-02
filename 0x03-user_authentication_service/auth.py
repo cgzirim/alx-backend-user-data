@@ -84,7 +84,18 @@ class Auth:
             return None
 
         user = self._db.find_user_by(session_id=session_id)
-        if user is None or 'session_id' not in dir(user):
+        if user is None or "session_id" not in dir(user):
             return None
 
         return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """Updates corresponding user's session ID to None."""
+        if user_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(id=user_id)
+            user.session_id = None
+        except NoResultFound:
+            return None
+        return None
