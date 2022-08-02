@@ -71,5 +71,6 @@ class Auth:
         except NoResultFound:
             return None
 
-        setattr(user, "session_id", _generate_uuid())
-        return self.session_id
+        user.session_id = _generate_uuid()
+
+        return user.session_id
