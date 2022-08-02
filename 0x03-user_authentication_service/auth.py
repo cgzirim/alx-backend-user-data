@@ -24,6 +24,9 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> bytes:
         """Registers a user"""
+        if not email or not password:
+            return None
+
         if not isinstance(email, str) or not isinstance(password, str):
             return None
 
