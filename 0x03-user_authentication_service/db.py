@@ -15,8 +15,7 @@ class DB:
     """
 
     def __init__(self) -> None:
-        """Initialize a new DB instance
-        """
+        """Initialize a new DB instance"""
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -31,9 +30,9 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_pwd: str) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Saves a user to the database."""
-        user = User(email=email, hashed_password=hashed_pwd)
+        user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
 
@@ -45,7 +44,7 @@ class DB:
         """
         if not kwargs:
             raise InvalidRequestError
-        
+
         column_names = User.__table__.columns.keys()
         for key in kwargs.keys():
             if key not in column_names:
@@ -67,7 +66,7 @@ class DB:
                 raise ValueError
 
         for k, v in kwargs.items():
-            if k != 'id' and type(v) != str:
+            if k != "id" and type(v) != str:
                 raise ValueError
             setattr(user, k, v)
 
