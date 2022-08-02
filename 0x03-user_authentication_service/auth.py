@@ -2,13 +2,15 @@
 """Auth module"""
 import bcrypt
 from db import DB
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 
 
 def _hash_password(password: str) -> bytes:
     """Hash password with bcrypt.hashpw"""
-    salt = bcrypt.gensalt()
+    if type(password) != str:
+        return None
 
+    salt = bcrypt.gensalt()
     hashed_pwd = bcrypt.hashpw(bytes(password, "utf-8"), salt)
 
     return hashed_pwd
