@@ -83,7 +83,7 @@ class Auth:
             return None
 
         user = self._db.find_user_by(session_id=session_id)
-        if user is None:
+        if user is None or 'session_id' not in dir(user):
             return None
 
         return user
