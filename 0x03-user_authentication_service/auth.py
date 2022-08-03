@@ -100,3 +100,34 @@ class Auth:
         except NoResultFound:
             return None
         return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Generate a UUID and update the user's reset_token database field.
+
+        Returns the generated UUID if the user corresponding to the emil exists.
+        Otherwise, raise a ValueError.
+        """
+        if email is None or isinstance(email, str) is False:
+            raise ValueError
+
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            raise ValueError
+
+        user.reset_token = _generate_uuid()
+        
+        return user.reset_token
+
+    def update_password(self, reset_token: str, password: str) -> None:
+        """Updates a user password."""
+        if not reset_token or not password:
+            return None
+
+        try:
+            user = self._db.find_user_by(reset_token=reset_token)
+        except NoResultFound:
+            raise None
+
+        user.hashed_password = _hash_password(password)
+        return None
