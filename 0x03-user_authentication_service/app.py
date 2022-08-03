@@ -102,7 +102,7 @@ def profile():
 def get_reset_password_token():
     """POST /reset_password
     Resets the password of the user that correspond with the input email.
-    
+
     Respond with 403 if the user is not registered. Otherwise,
     Respond with a JSON payload and a 200 HTTP satutus.
     """

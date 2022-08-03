@@ -104,8 +104,8 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """Generate a UUID and update the user's reset_token database field.
 
-        Returns the generated UUID if the user corresponding to the emil exists.
-        Otherwise, raise a ValueError.
+        Returns the generated UUID if the user corresponding to the email
+        exists. Otherwise, raise a ValueError.
         """
         if email is None or isinstance(email, str) is False:
             raise ValueError
@@ -116,7 +116,7 @@ class Auth:
             raise ValueError
 
         user.reset_token = _generate_uuid()
-        
+
         return user.reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
