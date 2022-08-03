@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""DB Module
+"""DB module
 """
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -17,8 +16,7 @@ class DB:
     """
 
     def __init__(self) -> None:
-        """Initialize a new DB instance
-        """
+        """Initialize a new DB instance"""
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -34,17 +32,16 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Saves the user to the database, and returns a User Obj."""
+        """Saves a user to the database."""
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
 
         return user
 
-    def find_user_by(self, **kwargs) -> User:
-        """takes in arbitrary keyword arguments and returns
-        the first row found in the users table as filtered
-        by the method’s input arguments
+    def find_user_by(self, **kwargs):
+        """Returns the first row found in the users table as filtered by the
+        input arguments.
         """
         if not kwargs:
             raise InvalidRequestError
@@ -55,26 +52,23 @@ class DB:
                 raise InvalidRequestError
 
         user = self._session.query(User).filter_by(**kwargs).first()
-
         if user is None:
             raise NoResultFound
 
         return user
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """
-        -takes user_id and arbitrary keyword arguments and returns None.
-        -the method will use find_user_by to locate the user to update,
-        then commit changes to the database.
-        """
-        updated_user = self.find_user_by(id=user_id)
+    def update_user(self, user_id, **kwargs):
+        """Updates a User instance."""
+        user = self.find_user_by(id=user_id)
 
         column_names = User.__table__.columns.keys()
         for key in kwargs.keys():
             if key not in column_names:
                 raise ValueError
 
-        for key, value in kwargs.items():
-            setattr(updated_user, key, value)
+        for k, v in kwargs.items():
+            if k != "id" and type(v) != str:
+                raise ValueError
+            setattr(user, k, v)
 
         self._session.commit()
