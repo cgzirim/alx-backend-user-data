@@ -104,7 +104,7 @@ def get_reset_password_token():
     Resets the password of the user that correspond with the input email.
 
     Respond with 403 if the user is not registered. Otherwise,
-    Respond with a JSON payload and a 200 HTTP satutus.
+    Respond with a JSON payload and a 200 HTTP status.
     """
     email = request.form.get('email')
     if email is None:
@@ -117,7 +117,35 @@ def get_reset_password_token():
 
     return jsonify({
         'email': '{}'.format(email),
-        'reset_token': reset_token})
+        'reset_token': reset_token}), 200
+
+
+@app.route("/reset_password", methods=['PUT'], strict_slashes=False)
+def update_password():
+    """PUT /reset_password.
+    Updates a user's password.
+
+    The request is expected to contain form data with fields "email",
+    "reset_token" and "new_password".
+
+    Respond with 403 HTTP status is the token is not valid. Otherwise,
+    Respond with a JSON payload an a 200 HTTP status
+    """
+    email = request.form.get('email')
+    reset_token = request.form.get('reset_token')
+    password = request.form.get('password')
+
+    if not email or not reset_token or not password:
+        abort(403)
+
+    try:
+        AUTH.update_password(reset_token, password)
+    except ValueError:
+        abort(403)
+
+    return jsonify({
+        'email': '{}'.format(email),
+        'message': 'Password updated'}), 200
 
 
 if __name__ == "__main__":
