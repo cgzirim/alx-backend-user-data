@@ -133,4 +133,3 @@ class Auth:
             user.id,
             hashed_password=_hash_password(password),
             reset_token=None)
-        return None
