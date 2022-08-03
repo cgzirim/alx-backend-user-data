@@ -62,7 +62,7 @@ def login():
     return response
 
 
-@app.route("/sessions", methods=["DELETE"], strict_slashes=True)
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
     """DELETE /session
     If the user exists, destroys the session and redirect the user
@@ -78,6 +78,24 @@ def logout():
 
     AUTH.destroy_session(user.id)
     return redirect("/", 302)
+
+
+@app.route("/profile", methods=['GET'], strict_slashes=False)
+def profile():
+    """GET /profile
+    Finds a user by session ID in request.
+    If the user exists, respond with JSON payload and 200 HTTP status.
+    Otherwise, respond with 403 HTTP status.
+    """
+    session_id = request.cookies.get("session_id")
+    if session_id is None:
+        abort(403)
+
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+
+    return jsonify({'email': "{}".format(user.email)}), 200
 
 
 if __name__ == "__main__":
