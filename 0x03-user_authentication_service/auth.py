@@ -121,7 +121,7 @@ class Auth:
 
     def update_password(self, reset_token: str, password: str) -> None:
         """Updates a user password."""
-        if reset_token is None or password is None:
+        if not reset_token or not password:
             return None
 
         try:
@@ -131,5 +131,5 @@ class Auth:
 
         self._db.update_user(
             user.id,
-            hashed_password=_hash_password(password),
+            hashed_password= _hash_password(password),
             reset_token=None)
