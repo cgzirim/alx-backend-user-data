@@ -1,6 +1,6 @@
 # Backend User Data - Personal data & User authentication
 
-This repository contains programs that were created specifically for ALX's back-end specialization track. Throughout the projects, I understood what Personally Identifiable Information (PII) is and learned, as well as practiced, using techniques for user authorization in web applications.
+This repository contains programs that were created specifically for ALX's back-end specialization track. Through the projects, I gained knowledge about Personally Identifiable Information (PII) and gained hands-on experience with implementing techniques for user authorization in web applications.
 
 ## Author :black_nib:
 - **Chigozirim Igweamaka** <[iChigozirim](https://github.com/iChigozirim)>
